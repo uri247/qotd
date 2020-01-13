@@ -1,2 +1,5 @@
-build/
+
+bld/
+.idea/
+
 *.swp

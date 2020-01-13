@@ -1,14 +1,11 @@
-#include "ClientSocket.hh"
-#include "Server.hh"
-
-#include <signal.h>
-
 #include <fstream>
 #include <random>
 #include <string>
 #include <vector>
-
 #include <iostream>
+#include <signal.h>
+#include "ClientSocket.h"
+#include "Server.h"
 
 Server server;
 

@@ -8,18 +8,16 @@ SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic" )
 
 FIND_PACKAGE( Threads REQUIRED )
 
-ADD_EXECUTABLE( qotd
-  qotd.cc
-  ClientSocket.cc
-  Server.cc
-)
+SET(COMMON_SRC Server.cpp Server.h ClientSocket.cpp ClientSocket.h)
+SET(QOTD_SRC qotd.cpp)
+SET(ECHO_SRC echo.cpp)
 
-TARGET_LINK_LIBRARIES( qotd ${CMAKE_THREAD_LIBS_INIT} )
 
-ADD_EXECUTABLE( echo
-  echo.cc
-  ClientSocket.cc
-  Server.cc
-)
-
+ADD_EXECUTABLE(echo ${COMMON_SRC} ${ECHO_SRC})
 TARGET_LINK_LIBRARIES( echo ${CMAKE_THREAD_LIBS_INIT} )
+
+
+ADD_EXECUTABLE(qotd ${COMMON_SRC} ${QOTD_SRC})
+TARGET_LINK_LIBRARIES( qotd ${CMAKE_THREAD_LIBS_INIT} )
+ADD_CUSTOM_COMMAND(TARGET qotd
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/Quotes.txt ${CMAKE_CURRENT_BINARY_DIR}/Quotes.txt)

@@ -1,14 +1,12 @@
-#include "ClientSocket.hh"
-#include "Server.hh"
-
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
-
 #include <sys/socket.h>
 #include <sys/types.h>
-
 #include <stdexcept>
+
+#include "ClientSocket.h"
+#include "Server.h"
 
 ClientSocket::ClientSocket( int fileDescriptor, Server& server )
   : _fileDescriptor( fileDescriptor )

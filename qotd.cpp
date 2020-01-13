@@ -1,12 +1,10 @@
-#include "ClientSocket.hh"
-#include "Server.hh"
-
-#include <signal.h>
-
 #include <fstream>
 #include <random>
 #include <string>
 #include <vector>
+#include <csignal>
+#include "ClientSocket.h"
+#include "Server.h"
 
 Server server;
 
@@ -58,7 +56,7 @@ int main( int argc, char** argv )
   std::mt19937 rng( rd() );
   std::uniform_int_distribution<std::size_t> distribution( 0, quotes.size() - 1 );
 
-  signal( SIGINT, handleExitSignal );
+  std::signal( SIGINT, handleExitSignal );
 
   server.setPort( 1041 );
 
