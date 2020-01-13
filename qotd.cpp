@@ -58,7 +58,7 @@ int main( int argc, char** argv )
 
   std::signal( SIGINT, handleExitSignal );
 
-  server.setPort( 1041 );
+  server.setPort( 5017 );
 
   server.onAccept( [&] ( std::weak_ptr<ClientSocket> socket )
   {

@@ -1,9 +1,9 @@
 CMAKE_MINIMUM_REQUIRED( VERSION 3.1 )
 
-PROJECT( SimpleServer CXX C )
+PROJECT(qotd VERSION 0.2  LANGUAGES CXX)
+SET(DOCKER_HUB_DIRECTORY uri247)
 
 SET( CMAKE_CXX_STANDARD 11 )
-
 SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic" )
 
 FIND_PACKAGE( Threads REQUIRED )
@@ -21,3 +21,16 @@ ADD_EXECUTABLE(qotd ${COMMON_SRC} ${QOTD_SRC})
 TARGET_LINK_LIBRARIES( qotd ${CMAKE_THREAD_LIBS_INIT} )
 ADD_CUSTOM_COMMAND(TARGET qotd
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/Quotes.txt ${CMAKE_CURRENT_BINARY_DIR}/Quotes.txt)
+
+
+set (docker_tag ${DOCKER_HUB_DIRECTORY}/${CMAKE_PROJECT_NAME})
+
+find_program(docker_exe docker)
+if(NOT docker_exe)
+    message(FATAL_ERROR "Cannot find the docker executable")
+endif()
+ADD_CUSTOM_TARGET(container
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/Dockerfile ${CMAKE_CURRENT_BINARY_DIR}
+    COMMAND ${docker_exe} build --tag ${docker_tag} .
+    COMMAND ${docker_exe} push ${docker_tag}
+    )

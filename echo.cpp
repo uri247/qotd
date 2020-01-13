@@ -1,9 +1,4 @@
-#include <fstream>
-#include <random>
-#include <string>
-#include <vector>
-#include <iostream>
-#include <signal.h>
+#include <csignal>
 #include "ClientSocket.h"
 #include "Server.h"
 
@@ -14,22 +9,24 @@ void handleExitSignal( int /* signal */ )
   server.close();
 }
 
-int main( int /* argc */, char** /* argv */ )
+
+int main(int argc, char** argv)
 {
-  signal( SIGINT, handleExitSignal );
+    (void)argc;
+    (void)argv;
 
-  server.setPort( 1031 );
+    std::signal( SIGINT, handleExitSignal );
 
-  server.onRead( [&] ( std::weak_ptr<ClientSocket> socket )
-  {
-    if( auto s = socket.lock() )
+    server.setPort( 5007 );
+    server.onRead( [&] ( const std::weak_ptr<ClientSocket>& socket )
     {
-      auto data = s->read();
-      s->write( data );
-    }
-  } );
+        if( auto s = socket.lock() )
+        {
+            auto data = s->read();
+            s->write( data );
+        }
+    });
 
-  server.listen();
-
-  return 0;
+    server.listen();
+    return 0;
 }
